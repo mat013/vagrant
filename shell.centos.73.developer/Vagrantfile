@@ -1,0 +1,57 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/7"
+  config.vm.box_version = "1611.01"
+
+  config.vm.provider "virtualbox" do |vb|
+     vb.gui = true
+
+     vb.cpus = 4
+     vb.memory = "2048"
+          
+     vb.customize ["modifyvm", :id, "--clipboard",   "bidirectional"]
+     vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"] 
+     vb.customize ["modifyvm", :id, "--vram", "128"]
+   end
+=begin
+   config.vm.provision "shell", inline: <<-SHELL
+     sudo yum install -y wget
+
+     sudo yum install -y gcc perl make
+     sudo yum remove -y kernel-headers.x86_64
+     
+     wget https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-headers-3.10.0-514.2.2.el7.x86_64.rpm
+     sudo rpm -ivh kernel-headers-3.10.0-514.2.2.el7.x86_64.rpm 
+     rm kernel-headers-3.10.0-514.2.2.el7.x86_64.rpm
+     
+     wget https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-devel-3.10.0-514.2.2.el7.x86_64.rpm
+     sudo rpm -ivh kernel-devel-3.10.0-514.2.2.el7.x86_64.rpm 
+     rm kernel-devel-3.10.0-514.2.2.el7.x86_64.rpm 
+          
+     wget https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-debug-devel-3.10.0-514.2.2.el7.x86_64.rpm
+     sudo rpm -ivh kernel-debug-devel-3.10.0-514.2.2.el7.x86_64.rpm 
+     rm kernel-debug-devel-3.10.0-514.2.2.el7.x86_64.rpm
+
+     sudo yum -y groupinstall "Development Tools"
+     
+     wget http://download.virtualbox.org/virtualbox/5.2.6/VBoxGuestAdditions_5.2.6.iso
+     sudo mount -o loop VBoxGuestAdditions_5.2.6.iso /mnt
+     sudo sh /mnt/VBoxLinuxAdditions.run
+     sudo umount /mnt
+     sudo rm VBoxGuestAdditions_5.2.6.iso
+
+     sudo rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm     
+     yum install -y puppet
+     
+     #sudo yum groupinstall -y "GNOME Desktop" "Graphical Administration Tools"
+     #sudo yum install -y epel-release
+     #sudo yum install -y terminator
+     
+     # sudo reboot
+   SHELL
+=end
+   config.vm.provision "puppet"
+end
+
