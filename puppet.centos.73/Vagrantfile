@@ -4,6 +4,7 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
   config.vm.box_version = "1611.01"
+
   config.vm.provider "virtualbox" do |vb|
      vb.gui = true
 
@@ -14,7 +15,7 @@ Vagrant.configure("2") do |config|
      vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"] 
      vb.customize ["modifyvm", :id, "--vram", "128"]
    end
-
+=begin
    config.vm.provision "shell", inline: <<-SHELL
      sudo yum install -y wget
 
@@ -41,22 +42,25 @@ Vagrant.configure("2") do |config|
      sudo umount /mnt
      sudo rm VBoxGuestAdditions_5.2.6.iso
 
+     #sudo rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm     
      sudo rpm -Uvh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
      yum install -y puppet
      
-     sudo yum groupinstall -y "GNOME Desktop" "Graphical Administration Tools"
-     sudo yum install -y epel-release
-     sudo yum install -y terminator
+     #sudo yum groupinstall -y "GNOME Desktop" "Graphical Administration Tools"
+     #sudo yum install -y epel-release
+     #sudo yum install -y terminator
      
-
-     #TODO create terminator icon     
-     
-     #TODO set the keyboard when login from console
-     # Once you are happy with the result, you can set the name of the new layout to use by default in /etc/vconsole.conf:
-     # KEYMAP="your-layout"
-     # https://unix.stackexchange.com/questions/112023/how-can-i-replace-a-string-in-a-files
-     
-     
-     
+     # sudo reboot
    SHELL
+=end
+
+  # https://puppet.com/docs/puppet/5.3/modules_fundamentals.html describes the folder structure of a module_path
+  # https://puppet.com/docs/puppet/5.3/style_guide.html describes the coding standards
+  
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = 'puppet/manifests'
+    puppet.module_path    = 'puppet/modules'
+    puppet.options = "--verbose --debug"
+  end
 end
+

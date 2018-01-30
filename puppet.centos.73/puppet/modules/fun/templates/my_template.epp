@@ -1,0 +1,8 @@
+<%- | Optional[String] $service_name = undef | -%>
+<%#
+https://puppet.com/docs/puppet/5.3/lang_template_epp.html describes the epp language
+-%>
+
+<% unless $service_name =~ Undef { -%>
+logfile <%= $service_name %>
+<% } -%>
