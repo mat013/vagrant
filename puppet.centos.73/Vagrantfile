@@ -56,7 +56,7 @@ Vagrant.configure("2") do |config|
 
   # https://puppet.com/docs/puppet/5.3/modules_fundamentals.html describes the folder structure of a module_path
   # https://puppet.com/docs/puppet/5.3/style_guide.html describes the coding standards
-  
+  # https://adamcod.es/2016/04/08/introduction-to-puppet.html describes the order of execution
   config.vm.provision "puppet" do |puppet|
     puppet.manifests_path = 'puppet/manifests'
     puppet.module_path    = 'puppet/modules'
