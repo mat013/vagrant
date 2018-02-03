@@ -16,26 +16,24 @@ Vagrant.configure("2") do |config|
    end
 
    config.vm.provision "shell", inline: <<-SHELL
-     sudo yum install -y wget
-
      sudo yum install -y gcc perl make
      sudo yum remove -y kernel-headers.x86_64
      
-     wget https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-headers-3.10.0-514.2.2.el7.x86_64.rpm
+     curl -L -O https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-headers-3.10.0-514.2.2.el7.x86_64.rpm
      sudo rpm -ivh kernel-headers-3.10.0-514.2.2.el7.x86_64.rpm 
      rm kernel-headers-3.10.0-514.2.2.el7.x86_64.rpm
      
-     wget https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-devel-3.10.0-514.2.2.el7.x86_64.rpm
+     curl -L -O https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-devel-3.10.0-514.2.2.el7.x86_64.rpm
      sudo rpm -ivh kernel-devel-3.10.0-514.2.2.el7.x86_64.rpm 
      rm kernel-devel-3.10.0-514.2.2.el7.x86_64.rpm 
           
-     wget https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-debug-devel-3.10.0-514.2.2.el7.x86_64.rpm
+     curl -L -O https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-debug-devel-3.10.0-514.2.2.el7.x86_64.rpm
      sudo rpm -ivh kernel-debug-devel-3.10.0-514.2.2.el7.x86_64.rpm 
      rm kernel-debug-devel-3.10.0-514.2.2.el7.x86_64.rpm
 
      sudo yum -y groupinstall "Development Tools"
      
-     wget http://download.virtualbox.org/virtualbox/5.2.6/VBoxGuestAdditions_5.2.6.iso
+     curl -L -O http://download.virtualbox.org/virtualbox/5.2.6/VBoxGuestAdditions_5.2.6.iso
      sudo mount -o loop VBoxGuestAdditions_5.2.6.iso /mnt
      sudo sh /mnt/VBoxLinuxAdditions.run
      sudo umount /mnt
@@ -48,15 +46,12 @@ Vagrant.configure("2") do |config|
      sudo yum install -y epel-release
      sudo yum install -y terminator
      
-
      #TODO create terminator icon     
      
      #TODO set the keyboard when login from console
      # Once you are happy with the result, you can set the name of the new layout to use by default in /etc/vconsole.conf:
      # KEYMAP="your-layout"
      # https://unix.stackexchange.com/questions/112023/how-can-i-replace-a-string-in-a-files
-     
-     
-     
+          
    SHELL
 end
