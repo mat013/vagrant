@@ -1,0 +1,14 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.define "m1" do |m1|
+    m1.vm.box = "hashicorp/boot2docker"
+    m1.vm.network "private_network", ip: "192.168.33.15"
+  end
+
+  config.vm.define "m2" do |m2|
+    m2.vm.box = "hashicorp/boot2docker"
+    m2.vm.network "private_network", ip: "192.168.33.16"
+  end
+end
