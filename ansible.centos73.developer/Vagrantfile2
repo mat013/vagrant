@@ -1,0 +1,114 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/7"
+  config.vm.box_version = "1611.01"
+  
+  config.vm.network "private_network", ip: "192.168.33.10"
+
+  config.vm.provider "virtualbox" do |vb|
+     vb.gui = true
+
+     vb.cpus = 4
+     vb.memory = "2048"
+          
+     vb.customize ["modifyvm", :id, "--clipboard",   "bidirectional"]
+     vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"] 
+     vb.customize ["modifyvm", :id, "--vram", "128"]
+   end
+
+   config.vm.provision "shell", inline: <<-SHELL
+     sudo yum install -y gcc perl make
+     sudo yum remove -y kernel-headers.x86_64
+     
+     curl -L -O https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-headers-3.10.0-514.2.2.el7.x86_64.rpm
+     sudo rpm -ivh kernel-headers-3.10.0-514.2.2.el7.x86_64.rpm 
+     rm kernel-headers-3.10.0-514.2.2.el7.x86_64.rpm
+     
+     curl -L -O https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-devel-3.10.0-514.2.2.el7.x86_64.rpm
+     sudo rpm -ivh kernel-devel-3.10.0-514.2.2.el7.x86_64.rpm 
+     rm kernel-devel-3.10.0-514.2.2.el7.x86_64.rpm 
+          
+     curl -L -O https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-debug-devel-3.10.0-514.2.2.el7.x86_64.rpm
+     sudo rpm -ivh kernel-debug-devel-3.10.0-514.2.2.el7.x86_64.rpm 
+     rm kernel-debug-devel-3.10.0-514.2.2.el7.x86_64.rpm
+
+     sudo yum -y groupinstall "Development Tools"
+     
+     curl -L -O http://download.virtualbox.org/virtualbox/5.2.6/VBoxGuestAdditions_5.2.6.iso
+     sudo mount -o loop VBoxGuestAdditions_5.2.6.iso /mnt
+     sudo sh /mnt/VBoxLinuxAdditions.run
+     sudo umount /mnt
+     sudo rm VBoxGuestAdditions_5.2.6.iso
+
+     sudo rpm -ivh https://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm     
+     yum install -y puppet
+     
+     sudo yum groupinstall -y "GNOME Desktop" "Graphical Administration Tools"
+     sudo yum install -y epel-release
+     sudo yum install -y terminator
+     
+     sudo yum install -y kdiff3
+
+     sudo yum remove -y java-1.7.0-openjdk-headless.x86_64
+     sudo yum remove -y java-1.8.0-openjdk-headless.x86_64
+     
+     curl -b "oraclelicense=accept-securebackup-cookie" -L -C - -O http://download.oracle.com/otn-pub/java/jdk/8u162-b12/0da788060d494f5095bf8624735fa2f1/jdk-8u162-linux-x64.rpm
+
+     sudo yum -y localinstall jdk-8u162-linux-x64.rpm
+     rm jdk-8u162-linux-x64.rpm
+
+     # SET JAVA_HOME
+     # SET GRADLE_HOME
+     # SET MVN_HOME
+     
+     # gradle      
+     curl -L -O https://services.gradle.org/distributions/gradle-4.4.1-bin.zip
+     unzip gradle-4.4.1-bin.zip
+     sudo mv gradle-4.4.1 /opt
+     sudo ln -sf /opt/gradle-4.4.1 /opt/gradle
+     rm gradle-4.4.1-bin.zip
+     
+     # maven
+     curl -L -O http://mirrors.rackhosting.com/apache/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
+     tar xvf apache-maven-3.5.2-bin.tar.gz
+     sudo mv apache-maven-3.5.2 /opt
+     sudo ln -sf /opt/apache-maven-3.5.2 /opt/maven
+     rm apache-maven-3.5.2-bin.tar.gz
+          
+     # intellij
+     curl -L -O https://download.jetbrains.com/idea/ideaIU-2017.3.3.tar.gz
+     tar xvf ideaIU-2017.3.3.tar.gz
+     sudo mv idea-IU-173.4301.25 /opt
+     sudo ln -sf /opt/idea-IU-173.4301.25 /opt/idea
+     rm ideaIU-2017.3.3.tar.gz
+     
+     # pycharm
+     curl -L -O https://download.jetbrains.com/python/pycharm-professional-2017.3.3.tar.gz
+     tar xvf pycharm-professional-2017.3.3.tar.gz
+     sudo mv pycharm-2017.3.3 /opt
+     sudo ln -sf /opt/pycharm-2017.3.3 /opt/pycharm
+     rm pycharm-professional-2017.3.3.tar.gz
+
+     # python tool 
+     sudo yum -y install python-pip
+     sudo pip install -U virtualenv
+     sudo pip install 'docker-py>=1.7.0'
+
+     sudo yum remove docker docker-common docker-selinux docker-engine
+     sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+     sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+     sudo yum install -y docker-ce
+     sudo systemctl start docker
+     
+     # ansible
+     
+     sudo yum install -y ansible
+          
+     # chrome
+     # https://www.tecmint.com/install-google-chrome-on-redhat-centos-fedora-linux/
+     # sudo yum install -y google-chrome-stable
+     systemctl set-default graphical.target
+  SHELL
+end
