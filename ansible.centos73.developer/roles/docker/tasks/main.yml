@@ -1,0 +1,65 @@
+- name: Remove docker
+  yum: 
+    name: docker
+    state: removed
+- name: Remove docker-common
+  yum: 
+    name: docker-common
+    state: removed
+- name: Remove docker-selinux
+  yum: 
+    name: docker-selinux
+    state: removed
+- name: Remove docker-engine
+  yum: 
+    name: docker-engine
+    state: removed
+- name: Install yum-utils
+  yum:
+    name: yum-utils
+    state: present
+- name: Install device-mapper-persistent-data
+  yum:
+    name: device-mapper-persistent-data
+    state: present
+- name: Install latest of lvm2
+  yum:
+    name: lvm2
+    state: present
+- name: Installing yum repository docker-ce.repo 
+  command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+- name: Install latest of docker-ce
+  yum:
+    name: docker-ce
+    state: latest
+- name: daemon-reload to pick up config changes
+  systemd:
+    daemon_reload: yes
+- name: Creating docker group
+  group:
+    name: docker
+    state: present
+- name: Adding vagrant to group docker
+  user: name=vagrant
+        groups=docker
+        append=yes        
+#In case of proxy 
+#- name: Create /etc/systemd/system/docker.service.d
+#  file:
+#    path: /etc/systemd/system/docker.service.d
+#    state: directory
+#    owner: root
+#    group: root
+#    mode: 0664
+#- name: Create /etc/systemd/system/docker.service.d/http-proxy.conf
+#  copy:
+#    src: http-proxy.conf
+#    dest: /etc/systemd/system/docker.service.d/http-proxy.conf
+#    owner: root
+#    group: root
+#    mode: 0644
+- name: start service docker
+  service:
+    name: docker
+    state: reloaded
+    enabled: yes
