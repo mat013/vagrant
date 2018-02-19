@@ -8,5 +8,5 @@
     dest: /home/vagrant/Desktop/terminator.desktop
     owner: vagrant
     group: vagrant
-    mode: 0644
+    mode: 0744
     

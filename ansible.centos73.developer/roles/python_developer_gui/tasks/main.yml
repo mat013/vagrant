@@ -1,0 +1,30 @@
+- name: Install PyCharm professional 2017.3.3
+  unarchive: 
+    src: https://download.jetbrains.com/python/pycharm-professional-2017.3.3.tar.gz
+    dest: /opt
+    remote_src: yes
+    validate_certs: False
+#    environment:
+#       http_proxy: 
+#       https_proxy:
+- name: Link from PyCharm specific version to generic 
+  file: 
+    src: /opt/pycharm-2017.3.3
+    dest: /opt/pycharm
+    owner: root
+    group: root
+    state: link
+- name: Link PyCharm
+  file: 
+    src: /opt/pycharm/bin/pycharm.sh
+    dest: /usr/local/bin/pycharm
+    owner: root
+    group: root
+    state: link
+- name: Copy pycharm.desktop
+  copy: 
+    src: pycharm.desktop
+    dest: /home/vagrant/Desktop/pycharm.desktop
+    owner: vagrant
+    group: vagrant
+    mode: 0744

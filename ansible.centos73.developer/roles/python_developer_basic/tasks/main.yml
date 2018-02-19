@@ -1,0 +1,51 @@
+- name: Install Python pip
+  yum: 
+    name: python-pip
+    state: latest
+- name: Create .pip folder for vagrant
+  file:
+    path: /home/vagrant/.pip
+    state: directory
+    owner: vagrant
+    group: vagrant
+# In case pip uses a local repository a pip.conf needs to be defined for root and vagrant
+#- name: Install pip.conf for vagrant
+#  copy: 
+#    src: pip.conf
+#    dest: /home/vagrant/.pip/pip.conf
+#    owner: vagrant
+#    group: vagrant
+#    mode: 0644
+#- name: Copy certificate for vagrant
+#  copy: 
+#    src: some.cert
+#    dest: /home/vagrant/.pip/some.cert
+#    owner: vagrant
+#    group: vagrant
+#    mode: 0644
+#- name: Create .pip folder for root
+#  file:
+#    path: /root/.pip
+#    state: directory
+#    owner: root
+#    group: root
+#- name: Install pip.conf for root
+#  copy: 
+#    src: pip.conf
+#    dest: /root/.pip/pip.conf
+#    owner: root
+#    group: root
+#    mode: 0644
+#- name: Copy certificate for root 
+#  copy: 
+#    src: some.cert
+#    dest: /some.cert/.pip/some.cert
+#    owner: root
+#    group: root
+#    mode: 0644
+- name: Install virtualenv 
+  pip:
+    name: virtualenv  
+#    environment:
+#       http_proxy: 
+#       https_proxy:

@@ -1,0 +1,72 @@
+- name: Remove java-1.7.0-openjdk-headless.x86_64
+  yum: 
+    name: java-1.7.0-openjdk-headless.x86_64
+    state: removed
+- name: Remove java-1.8.0-openjdk-headless.x86_64
+  yum: 
+    name: java-1.8.0-openjdk-headless.x86_64
+    state: removed
+- name: Download JDK 8 build 162 
+  command: curl -b "oraclelicense=accept-securebackup-cookie" -L -C - -o /tmp/jdk-8u162-linux-x64.rpm -O http://download.oracle.com/otn-pub/java/jdk/8u162-b12/0da788060d494f5095bf8624735fa2f1/jdk-8u162-linux-x64.rpm
+#    environment:
+#       http_proxy: 
+#       https_proxy:
+- name: Install JDK 8 build 162 
+  yum: 
+    name: /tmp/jdk-8u162-linux-x64.rpm
+    state: present
+- name: Remove JDK 8 build 162 
+  file: 
+    path: /tmp/jdk-8u162-linux-x64.rpm
+    state: absent
+- name: Install Maven 3.5.2 
+  unarchive: 
+    src: http://mirrors.rackhosting.com/apache/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
+    dest: /opt
+    remote_src: yes
+#    environment:
+#       http_proxy: 
+#       https_proxy:
+- name: Link from maven specific version to generic 
+  file: 
+    src: /opt/apache-maven-3.5.2
+    dest: /opt/maven
+    owner: root
+    group: root
+    state: link
+- name: Link maven 
+  file: 
+    src: /opt/maven/bin/mvn
+    dest: /usr/local/bin/mvn
+    owner: root
+    group: root
+    state: link
+- name: Install Gradle 4.4.1
+  unarchive: 
+    src: https://services.gradle.org/distributions/gradle-4.4.1-bin.zip
+    dest: /opt
+    remote_src: yes
+#    environment:
+#       http_proxy: 
+#       https_proxy:
+- name: Link from gradle specific version to generic 
+  file: 
+    src: /opt/gradle-4.4.1
+    dest: /opt/gradle
+    owner: root
+    group: root
+    state: link
+- name: Link gradle 
+  file: 
+    src: /opt/gradle/bin/gradle
+    dest: /usr/local/bin/gradle
+    owner: root
+    group: root
+    state: link
+- name: Setting GRADLE_HOME and MAVEN_HOME
+  copy: 
+    src: java_developer_basic.sh
+    dest: /etc/profile.d/java_developer_basic.sh
+    owner: root
+    group: root
+    mode: 0744

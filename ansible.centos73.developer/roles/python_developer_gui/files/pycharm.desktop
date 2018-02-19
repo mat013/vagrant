@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=PyCharm
+Comment=IDE for Python
+TryExec=pycharm
+Exec=pycharm
+Icon=/opt/pycharm/bin/pycharm.png
+Type=Application
+Categories=GNOME;GTK;Development;System;

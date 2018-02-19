@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=IntelliJ
+Comment=IDE for Java
+TryExec=idea
+Exec=idea
+Icon=/opt/idea/bin/idea.png
+Type=Application
+Categories=GNOME;GTK;Development;System;

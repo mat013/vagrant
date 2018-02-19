@@ -1,0 +1,30 @@
+- name: Install PyCharm 2017.3.3 Ultimate
+  unarchive: 
+    src: https://download.jetbrains.com/idea/ideaIU-2017.3.3.tar.gz
+    dest: /opt
+    remote_src: yes
+    validate_certs: False
+#    environment:
+#       http_proxy: 
+#       https_proxy:
+- name: Link from idea specific version to generic 
+  file: 
+    src: /opt/idea-IU-173.4301.25
+    dest: /opt/idea
+    owner: root
+    group: root
+    state: link
+- name: Link idea 
+  file: 
+    src: /opt/idea/bin/idea.sh
+    dest: /usr/local/bin/idea
+    owner: root
+    group: root
+    state: link
+- name: Copy intellij.desktop
+  copy: 
+    src: intellij.desktop
+    dest: /home/vagrant/Desktop/intellij.desktop
+    owner: vagrant
+    group: vagrant
+    mode: 0744
