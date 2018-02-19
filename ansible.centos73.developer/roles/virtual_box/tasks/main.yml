@@ -1,2 +1,58 @@
-- name: test
-  shell: echo hello world
+- name: Remove kernel-headers.x86_64
+  yum: 
+    name: kernel-headers.x86_64
+    state: removed
+- name: Install kernel-headers-3.10.0-514.2.2.el7.x86_64.rpm
+  yum: 
+    name: https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-headers-3.10.0-514.2.2.el7.x86_64.rpm
+    state: present
+- name: Install kernel-devel-3.10.0-514.2.2.el7.x86_64.rpm
+  yum: 
+    name: https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-devel-3.10.0-514.2.2.el7.x86_64.rpm
+    state: present
+- name: Install kernel-debug-devel-3.10.0-514.2.2.el7.x86_64.rpm
+  yum: 
+    name: https://buildlogs.centos.org/c7.1611.u/kernel/20161207134106/3.10.0-514.2.2.el7.x86_64/kernel-debug-devel-3.10.0-514.2.2.el7.x86_64.rpm
+    state: present
+- name: Install Development Tools
+  yum: 
+    name: "@Development Tools"
+    state: present
+- name: Install dkms 
+  yum: 
+    name: dkms
+    state: present
+- name: Install patch 
+  yum: 
+    name: patch
+    state: present
+- name: Install perl 
+  yum: 
+    name: perl
+    state: present
+- name: Install gcc 
+  yum: 
+    name: gcc
+    state: present
+- name: Install make 
+  yum: 
+    name: make
+    state: present
+- name: Get guest additions {{ virtual_box_version }}
+  get_url:
+    url: http://download.virtualbox.org/virtualbox/{{ virtual_box_version }}/VBoxGuestAdditions_{{ virtual_box_version }}.iso
+    dest: /tmp/VBoxGuestAdditions_{{ virtual_box_version }}.iso
+- name: Mount guest additions {{ virtual_box_version }}
+  command: mount -o loop /tmp/VBoxGuestAdditions_{{ virtual_box_version }}.iso /mnt
+- name: Execute VBoxLinuxAdditions.run
+  command: sh /mnt/VBoxLinuxAdditions.run
+  register: result
+  failed_when: not (result.rc == 2 or result.rc == 0) 
+- name: Unmount guest additions {{ virtual_box_version }}
+  mount: 
+    path: /mnt
+    state: unmounted
+- name: Remove guest additions {{ virtual_box_version }}
+  file: 
+    path: /tmp/VBoxGuestAdditions_{{ virtual_box_version }}.iso
+    state: absent

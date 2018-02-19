@@ -1,0 +1,12 @@
+- name: Install kdiff3
+  yum: 
+    name: "kdiff3"
+    state: present
+- name: Install launcher for kdiff3
+  copy: 
+    src: kdiff3.desktop
+    dest: /home/vagrant/Desktop/kdiff3.desktop
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+    

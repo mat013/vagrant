@@ -1,0 +1,16 @@
+- name: Install GNOME Desktop
+  yum: 
+    name: "@^GNOME Desktop"
+    state: present
+- name: Install Graphical Administration Tools
+  yum: 
+    name: "@Graphical Administration Tools"
+    state: present
+- name: Create Desktop folder for Vagrant
+  file:
+    path: /home/vagrant/Desktop
+    state: directory
+    owner: vagrant
+    group: vagrant
+- name: Make GUI start at boot up
+  command: systemctl set-default graphical.target

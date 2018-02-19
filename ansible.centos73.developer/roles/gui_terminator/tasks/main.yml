@@ -1,0 +1,12 @@
+- name: Install terminator
+  yum: 
+    name: "terminator"
+    state: present
+- name: Install launcher for terminator
+  copy: 
+    src: terminator.desktop
+    dest: /home/vagrant/Desktop/terminator.desktop
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+    

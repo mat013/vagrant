@@ -1,0 +1,15 @@
+- name: Install git 
+  yum:
+    name: git
+    state: latest
+- name: Create .gitconfig
+  template:
+    src: gitconfig.j2
+    dest: /home/vagrant/.gitconfig
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+- name: Install dos2unix 
+  yum: 
+    name: git
+    state: latest
