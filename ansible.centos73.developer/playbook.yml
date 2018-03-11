@@ -11,21 +11,21 @@
         name: virtual_box
 ##    - import_role:
 ##        name: cntlm
-##    - import_role:
-##        name: docker
+    - import_role:
+        name: docker
     - import_role:
         name: gui_gnome
     - import_role:
         name: gui_terminator
     - import_role:
-        name: developer_basic
+        name: developer_core
     - import_role:
         name: developer_gui
-##    - import_role:
-##        name: java_developer_basic
-##    - import_role:
-##        name: java_developer_gui
-##    - import_role:
-##        name: python_developer_basic
-##    - import_role:
-##        name: python_developer_gui
+#    - import_role:
+#        name: java_developer_core
+#    - import_role:
+#        name: java_developer_gui
+#    - import_role:
+#        name: python_developer_core
+#    - import_role:
+#        name: python_developer_gui
