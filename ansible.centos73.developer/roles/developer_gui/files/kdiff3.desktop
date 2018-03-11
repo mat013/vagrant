@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=KDiff3
+Comment=Diff tool
+TryExec=kdiff3
+Exec=kdiff3
+Icon=kdiff3
+Type=Application
